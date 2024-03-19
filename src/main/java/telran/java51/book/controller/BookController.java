@@ -17,16 +17,15 @@ import telran.java51.book.service.BookService;
 @RequiredArgsConstructor
 public class BookController {
 	final BookService bookService;
-	
+
 	@PostMapping("/book")
 	public boolean addBook(@RequestBody BookDto bookDto) {
 		return bookService.addBook(bookDto);
 	}
-	
+
 	@GetMapping("/book/{isbn}")
 	public BookDto findBookByIsbn(@PathVariable String isbn) {
 		return bookService.findBookByIsbn(isbn);
-		
 	}
 	
 	@DeleteMapping("/book/{isbn}")
@@ -55,7 +54,7 @@ public class BookController {
 	}
 	
 	@GetMapping("/publishers/author/{authorName}")
-	Iterable<String> findPublisherByAuthor(@PathVariable String authorName){
+	Iterable<String> findPublishersByAuthor(@PathVariable String authorName){
 		return bookService.findPublishersByAuthor(authorName);
 	}
 	
