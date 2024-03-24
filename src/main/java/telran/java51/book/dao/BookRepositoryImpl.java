@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 import telran.java51.book.model.Book;
 
 @Repository
@@ -17,20 +19,23 @@ public class BookRepositoryImpl implements BookRepository {
 
 	@Override
 	public Stream<Book> findByAuthorsName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		TypedQuery<Book> query = em.createQuery("select b from Authors a join a.books b where a.name=?1", Book.class);
+		query.setParameter(1, name);
+		return query.getResultStream();
 	}
 
 	@Override
 	public Stream<Book> findByPublisherPublisherName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		TypedQuery<Book> query = em.createQuery("select b from Publisher p join p.books b where p.publisherName=?", Book.class);
+		query.setParameter(1, name);
+		return query.getResultStream();
 	}
 
 	@Override
 	public void deleteByAuthorsName(String name) {
-		// TODO Auto-generated method stub
-
+		Query query = em.createQuery("delete from Book b join b.authors a where a.name=?1");
+		query.setParameter(1, name);
+		query.executeUpdate();
 	}
 
 	@Override
@@ -46,13 +51,16 @@ public class BookRepositoryImpl implements BookRepository {
 
 	@Override
 	public Optional<Book> findById(String isbn) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		return Optional.ofNullable(em.find(Book.class, isbn));
 	}
 
 	@Override
 	public void deleteById(String isbn) {
-		// TODO Auto-generated method stub
+		Book book = em.find(Book.class, isbn);
+		em.remove(book);
+//		Query query = em.createQuery("delete from Book b where b.isbn=?1");
+//		query.setParameter(1, isbn);
+//		query.executeUpdate();
 
 	}
 
